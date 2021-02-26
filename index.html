@@ -13,7 +13,7 @@
 <meta property="og:url" content="http://example.com/child/index.html">
 <meta property="og:site_name" content="手可摘星尘">
 <meta property="og:locale" content="en_US">
-<meta property="article:author" content="xuejb">
+<meta property="article:author" content="xuexi">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="手可摘星尘" type="application/atom+xml">
@@ -229,6 +229,138 @@
 
 
   
+    <article id="post-51单片机P0口" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/02/26/51%E5%8D%95%E7%89%87%E6%9C%BAP0%E5%8F%A3/">51单片机P0</a>
+    </h1>
+  
+
+        
+        <a href="/2021/02/26/51%E5%8D%95%E7%89%87%E6%9C%BAP0%E5%8F%A3/" class="archive-article-date">
+  	<time datetime="2021-02-26T14:31:55.451Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="关于51单片机管脚整体赋值"><a href="#关于51单片机管脚整体赋值" class="headerlink" title="关于51单片机管脚整体赋值"></a>关于51单片机管脚整体赋值</h1><h2 id="一个我自己搞错却一直没有发现的问题"><a href="#一个我自己搞错却一直没有发现的问题" class="headerlink" title="一个我自己搞错却一直没有发现的问题"></a>一个我自己搞错却一直没有发现的问题</h2><p>首先感谢一个小姐姐的提问，坚持自己的观点并且用实践证明自己是对的。更值得感谢的是，她愿意和我分享这些，共同进步。</p>
+<p>在使用矩阵键盘和流水灯的时候，通常都是选择直接定义P0口的方式来省略位定义。问题就是，当P0=0x01时，应该是P0^0=1，还是P0^7=1 ?</p>
+<p>通过点灯实验，最终结果是 P0^0=1.</p>
+<p>也就是说，最高位是p0.7位</p>
+<p>真是个值得让我永远记得的事情。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/02/26/51%E5%8D%95%E7%89%87%E6%9C%BAP0%E5%8F%A3/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-I2c通信" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/02/20/I2c%E9%80%9A%E4%BF%A1/">I2c通信</a>
+    </h1>
+  
+
+        
+        <a href="/2021/02/20/I2c%E9%80%9A%E4%BF%A1/" class="archive-article-date">
+  	<time datetime="2021-02-20T08:18:20.447Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-AT24C02（I2c总线）"><a href="#1-AT24C02（I2c总线）" class="headerlink" title="1.AT24C02（I2c总线）"></a>1.AT24C02（I2c总线）</h2><h4 id="1-AT24C02介绍"><a href="#1-AT24C02介绍" class="headerlink" title="1.AT24C02介绍"></a>1.AT24C02介绍</h4><p>AT24C02是一种掉电不丢失的存储器，可用来保存单片机运行时永久保存的数据信息；AT24C02的储存介质是EEPROM，所使用的通讯接口是I2c总线，其容量为256字节，所以，其地址是0~256；</p>
+        
+          <a class="article-more-a" href="/2021/02/20/I2c%E9%80%9A%E4%BF%A1/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/02/20/I2c%E9%80%9A%E4%BF%A1/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-51单片机串口通信" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -305,7 +437,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 xuejb
+    		&copy; 2021 xuexi
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
