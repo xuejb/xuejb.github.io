@@ -26,7 +26,7 @@
 <meta property="og:description" content="stm32定时器生成PWM基于f103C8T6，TIM4通道1产生PWM1234567891011121314151617181920212223242526272829303132333435void TIM4_PWM_Init(u16 arr,u16 psc)&amp;#123;  	&#x2F;&#x2F;**结构体声明**&#x2F;&#x2F;	GPIO_InitTypeDef GPIO_InitStructure;">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-08-09T08:00:27.000Z">
-<meta property="article:modified_time" content="2021-08-09T08:15:06.630Z">
+<meta property="article:modified_time" content="2021-08-09T08:36:59.266Z">
 <meta property="article:author" content="xuexi">
 <meta property="article:tag" content="PWM">
 <meta name="twitter:card" content="summary">
@@ -328,15 +328,29 @@
 
 
         
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
 
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2021/08/09/stm32%E9%80%9A%E7%94%A8%E5%AE%9A%E6%97%B6%E5%99%A8%E4%BA%A7%E7%94%9FPWM/#comments" class="article-comment-link">评论</a></span>
         
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 374(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 1(分)</span>
+	
+
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
         <h1 id="stm32定时器生成PWM"><a href="#stm32定时器生成PWM" class="headerlink" title="stm32定时器生成PWM"></a>stm32定时器生成PWM</h1><h4 id="基于f103C8T6，TIM4通道1产生PWM"><a href="#基于f103C8T6，TIM4通道1产生PWM" class="headerlink" title="基于f103C8T6，TIM4通道1产生PWM"></a>基于f103C8T6，TIM4通道1产生PWM</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">TIM4_PWM_Init</span><span class="params">(u16 arr,u16 psc)</span></span></span><br><span class="line"><span class="function"></span>&#123;  </span><br><span class="line">	<span class="comment">//**结构体声明**//</span></span><br><span class="line">	GPIO_InitTypeDef GPIO_InitStructure;            <span class="comment">//声明GPIO</span></span><br><span class="line">	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure; <span class="comment">//声明定时器</span></span><br><span class="line">	TIM_OCInitTypeDef  TIM_OCInitStructure;         <span class="comment">//声明PWM通道</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//**时钟使能**//</span></span><br><span class="line">	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);	<span class="comment">//使能定时器TIM4时钟</span></span><br><span class="line">	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);	 <span class="comment">//使能PB端口时钟</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//配置GPIO//</span></span><br><span class="line">	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;				<span class="comment">//PWM--&gt;PB6端口配置</span></span><br><span class="line">	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP; 		 <span class="comment">//复用推挽输出</span></span><br><span class="line">	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;		 <span class="comment">//IO口速度为50MHz</span></span><br><span class="line">	GPIO_Init(MOTO_GPIO_PORT, &amp;GPIO_InitStructure);			<span class="comment">//根据设定参数初始化GPIOB.6</span></span><br><span class="line">	GPIO_SetBits(GPIOB,GPIO_Pin_6);</span><br><span class="line">	</span><br><span class="line"> 	 <span class="comment">//初始化TIM4</span></span><br><span class="line">	TIM_TimeBaseStructure.TIM_Period = arr; <span class="comment">//设置在下一个更新事件装入活动的自动重装载寄存器周期的值</span></span><br><span class="line">	TIM_TimeBaseStructure.TIM_Prescaler =psc; <span class="comment">//设置用来作为TIMx时钟频率除数的预分频值 </span></span><br><span class="line">	TIM_TimeBaseStructure.TIM_ClockDivision = <span class="number">0</span>; <span class="comment">//设置时钟分割:TDTS = Tck_tim</span></span><br><span class="line">	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  <span class="comment">//TIM向上计数模式</span></span><br><span class="line">	TIM_TimeBaseInit(TIM4, &amp;TIM_TimeBaseStructure); <span class="comment">//根据TIM_TimeBaseInitStruct中指定的参数初始																	化TIMx的时间基数单位</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//初始化TIM4 Channel1 PWM模式	 </span></span><br><span class="line">	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1; <span class="comment">//选择定时器模式:TIM脉冲宽度调制模式2</span></span><br><span class="line"> 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable; <span class="comment">//比较输出使能</span></span><br><span class="line">	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High; <span class="comment">//输出极性:TIM输出比较极性高</span></span><br><span class="line">	TIM_OC1Init(TIM4, &amp;TIM_OCInitStructure);  <span class="comment">//根据T指定的参数初始化外设TIM4 OC1</span></span><br><span class="line"></span><br><span class="line">	TIM_OC1PreloadConfig(TIM4, TIM_OCPreload_Enable);  <span class="comment">//让oc1能重装载</span></span><br><span class="line">	</span><br><span class="line">	TIM_Cmd(TIM4, ENABLE);  <span class="comment">//使能TIM4</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>因为C8T6的主频为72MHz，所以一般采用arr =999，分频系数psc = 719。即产生周期是1ms的pwm波。</p>
+<p>因为C8T6的主频为72MHz，所以一般采用arr =999，分频系数psc = 71。即产生周期是1ms的pwm波。</p>
 <h4 id="当我们在主函数设置PWM占空比时，使用的是这个函数"><a href="#当我们在主函数设置PWM占空比时，使用的是这个函数" class="headerlink" title="当我们在主函数设置PWM占空比时，使用的是这个函数"></a>当我们在主函数设置PWM占空比时，使用的是这个函数</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TIM_SetCompare1(TIM4,data);</span><br></pre></td></tr></table></figure>
 <h3 id="注：此时设置的data应当大于0小于1000；"><a href="#注：此时设置的data应当大于0小于1000；" class="headerlink" title="注：此时设置的data应当大于0小于1000；"></a>注：此时设置的data应当大于0小于1000；</h3><p>data/1000 = 占空比</p>
 
@@ -516,6 +530,8 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
    
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
 
 
 
