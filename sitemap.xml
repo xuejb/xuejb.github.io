@@ -23,7 +23,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/child/books/index.html</loc>
+    <loc>http://example.com/child/about/index.html</loc>
     
     <lastmod>2021-05-31</lastmod>
     
@@ -37,14 +37,14 @@
   </url>
   
   <url>
-    <loc>http://example.com/child/about/index.html</loc>
+    <loc>http://example.com/child/books/index.html</loc>
     
     <lastmod>2021-05-31</lastmod>
     
   </url>
   
   <url>
-    <loc>http://example.com/child/repository/index.html</loc>
+    <loc>http://example.com/child/tags/index.html</loc>
     
     <lastmod>2021-05-31</lastmod>
     
@@ -58,7 +58,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/child/tags/index.html</loc>
+    <loc>http://example.com/child/repository/index.html</loc>
     
     <lastmod>2021-05-31</lastmod>
     
@@ -74,14 +74,14 @@
 
   
   <url>
-    <loc>http://example.com/child/tags/stm32-%E9%97%A8%E7%A6%81/</loc>
+    <loc>http://example.com/child/tags/PWM/</loc>
     <lastmod>2021-08-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://example.com/child/tags/PWM/</loc>
+    <loc>http://example.com/child/tags/stm32-%E9%97%A8%E7%A6%81/</loc>
     <lastmod>2021-08-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -97,14 +97,14 @@
 
   
   <url>
-    <loc>http://example.com/child/categories/%E9%A1%B9%E7%9B%AE/</loc>
+    <loc>http://example.com/child/categories/STM32/</loc>
     <lastmod>2021-08-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://example.com/child/categories/STM32/</loc>
+    <loc>http://example.com/child/categories/%E9%A1%B9%E7%9B%AE/</loc>
     <lastmod>2021-08-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
