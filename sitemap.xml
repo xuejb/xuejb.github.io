@@ -23,7 +23,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/child/repository/index.html</loc>
+    <loc>http://example.com/child/books/index.html</loc>
     
     <lastmod>2021-05-31</lastmod>
     
@@ -37,6 +37,20 @@
   </url>
   
   <url>
+    <loc>http://example.com/child/about/index.html</loc>
+    
+    <lastmod>2021-05-31</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://example.com/child/repository/index.html</loc>
+    
+    <lastmod>2021-05-31</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://example.com/child/links/index.html</loc>
     
     <lastmod>2021-05-31</lastmod>
@@ -44,21 +58,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/child/books/index.html</loc>
-    
-    <lastmod>2021-05-31</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://example.com/child/tags/index.html</loc>
-    
-    <lastmod>2021-05-31</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://example.com/child/about/index.html</loc>
     
     <lastmod>2021-05-31</lastmod>
     
