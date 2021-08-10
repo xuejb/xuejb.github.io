@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>基于stm32的宿舍门禁系统 | Hexo</title>
+  <meta name="description" content="原件：stm32f103c8t6，RC522，MG90S舵机首先，配置LED以及MG90S初始化​        MG90S的OUT口接的是PB6，也就是stm32f103c8t6定时器TIM4的通道1。通过TIM4产生周期为20ms的PWM波，当高电平所占时间为1ms时，舵机转到中点位置。 mg90s.c1234567891011121314151617181920212223242526272">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于stm32的宿舍门禁系统">
+<meta property="og:url" content="http://example.com/child/2021/08/10/%E5%9F%BA%E4%BA%8Estm32%E7%9A%84%E5%AE%BF%E8%88%8D%E9%97%A8%E7%A6%81%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="手可摘星尘">
+<meta property="og:description" content="原件：stm32f103c8t6，RC522，MG90S舵机首先，配置LED以及MG90S初始化​        MG90S的OUT口接的是PB6，也就是stm32f103c8t6定时器TIM4的通道1。通过TIM4产生周期为20ms的PWM波，当高电平所占时间为1ms时，舵机转到中点位置。 mg90s.c1234567891011121314151617181920212223242526272">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-08-10T12:22:00.000Z">
+<meta property="article:modified_time" content="2021-08-10T14:26:36.120Z">
+<meta property="article:author" content="xuexi">
+<meta property="article:tag" content="stm32,门禁">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://example.com/child/2021/08/10/%E5%9F%BA%E4%BA%8Estm32%E7%9A%84%E5%AE%BF%E8%88%8D%E9%97%A8%E7%A6%81%E7%B3%BB%E7%BB%9F/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="手可摘星尘" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/xuejb" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">手可摘星辰</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">ARM,st</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> hefei, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/xuejb" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/STM32/">STM32</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/PWM/" rel="tag">PWM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/stm32-%E9%97%A8%E7%A6%81/" rel="tag">stm32,门禁</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/PWM/" style="font-size: 13px;">PWM</a> <a href="/tags/stm32-%E9%97%A8%E7%A6%81/" style="font-size: 13px;">stm32,门禁</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 13px;">随笔</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">八月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">二月 2021</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/08/10/%E5%9F%BA%E4%BA%8Estm32%E7%9A%84%E5%AE%BF%E8%88%8D%E9%97%A8%E7%A6%81%E7%B3%BB%E7%BB%9F/" class="title">基于stm32的宿舍门禁系统</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-10T12:22:00.000Z" itemprop="datePublished">2021-08-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/STM32/">STM32</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/08/09/stm32%E9%80%9A%E7%94%A8%E5%AE%9A%E6%97%B6%E5%99%A8%E4%BA%A7%E7%94%9FPWM/" class="title">stm32通用定时器产生PWM</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-09T08:00:27.000Z" itemprop="datePublished">2021-08-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/02/15/%E6%96%B0%E7%9A%84%E4%B8%80%E5%B9%B4/" class="title">新的一年</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-02-15T13:15:27.000Z" itemprop="datePublished">2021-02-15</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-基于stm32的宿舍门禁系统" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      基于stm32的宿舍门禁系统
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2021/08/10/%E5%9F%BA%E4%BA%8Estm32%E7%9A%84%E5%AE%BF%E8%88%8D%E9%97%A8%E7%A6%81%E7%B3%BB%E7%BB%9F/" class="article-date">
+	  <time datetime="2021-08-10T12:22:00.000Z" itemprop="datePublished">2021-08-10</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/stm32-%E9%97%A8%E7%A6%81/" rel="tag">stm32,门禁</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2021/08/10/%E5%9F%BA%E4%BA%8Estm32%E7%9A%84%E5%AE%BF%E8%88%8D%E9%97%A8%E7%A6%81%E7%B3%BB%E7%BB%9F/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 950(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 4(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h4 id="原件：stm32f103c8t6，RC522，MG90S舵机"><a href="#原件：stm32f103c8t6，RC522，MG90S舵机" class="headerlink" title="原件：stm32f103c8t6，RC522，MG90S舵机"></a>原件：stm32f103c8t6，RC522，MG90S舵机</h4><h4 id="首先，配置LED以及MG90S初始化"><a href="#首先，配置LED以及MG90S初始化" class="headerlink" title="首先，配置LED以及MG90S初始化"></a>首先，配置LED以及MG90S初始化</h4><p>​        MG90S的OUT口接的是PB6，也就是stm32f103c8t6定时器TIM4的通道1。通过TIM4产生周期为20ms的PWM波，当高电平所占时间为1ms时，舵机转到中点位置。</p>
+<h6 id="mg90s-c"><a href="#mg90s-c" class="headerlink" title="mg90s.c"></a>mg90s.c</h6><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">TIM4_PWM_Init</span><span class="params">(u16 arr,u16 psc)</span></span></span><br><span class="line"><span class="function"></span>&#123;  </span><br><span class="line">	<span class="comment">//**结构体声明**//</span></span><br><span class="line">	GPIO_InitTypeDef GPIO_InitStructure;            <span class="comment">//声明GPIO</span></span><br><span class="line">	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure; <span class="comment">//声明定时器</span></span><br><span class="line">	TIM_OCInitTypeDef  TIM_OCInitStructure;         <span class="comment">//声明PWM通道</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//**时钟使能**//</span></span><br><span class="line">	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);	<span class="comment">//使能定时器TIM4时钟</span></span><br><span class="line">	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);	 <span class="comment">//使能PB端口时钟</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//配置GPIO//</span></span><br><span class="line">	GPIO_InitStructure.GPIO_Pin = PWM_GPIO_PIN;				<span class="comment">//PWM 端口配置</span></span><br><span class="line">	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP; 		 <span class="comment">//复用推挽输出</span></span><br><span class="line">	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;		 <span class="comment">//IO口速度为50MHz</span></span><br><span class="line">	GPIO_Init(MOTO_GPIO_PORT, &amp;GPIO_InitStructure);			<span class="comment">//根据设定参数初始化GPIOB6</span></span><br><span class="line">	GPIO_SetBits(MOTO_GPIO_PORT,PWM_GPIO_PIN);</span><br><span class="line"></span><br><span class="line">  <span class="comment">//初始化TIM4</span></span><br><span class="line">	TIM_TimeBaseStructure.TIM_Period = arr; <span class="comment">//设置在下一个更新事件装入活动的自动重装载寄存器周期的值</span></span><br><span class="line">	TIM_TimeBaseStructure.TIM_Prescaler =psc; <span class="comment">//设置用来作为TIMx时钟频率除数的预分频值 </span></span><br><span class="line">	TIM_TimeBaseStructure.TIM_ClockDivision = <span class="number">0</span>; <span class="comment">//设置时钟分割:TDTS = Tck_tim</span></span><br><span class="line">	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  <span class="comment">//TIM向上计数模式</span></span><br><span class="line">	TIM_TimeBaseInit(TIM4, &amp;TIM_TimeBaseStructure); <span class="comment">//根据TIM_TimeBaseInitStruct中指定的参数初始化TIMx的时间基数单位</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//初始化TIM4 Channel1 PWM模式	 </span></span><br><span class="line">	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1; <span class="comment">//选择定时器模式:TIM脉冲宽度调制模式2</span></span><br><span class="line"> 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable; <span class="comment">//比较输出使能</span></span><br><span class="line">	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High; <span class="comment">//输出极性:TIM输出比较极性高</span></span><br><span class="line">	TIM_OC1Init(TIM4, &amp;TIM_OCInitStructure);  <span class="comment">//根据T指定的参数初始化外设TIM4 OC1</span></span><br><span class="line">	</span><br><span class="line">	TIM_OC1PreloadConfig(TIM4, TIM_OCPreload_Enable);  <span class="comment">//让oc1能重装载</span></span><br><span class="line">	</span><br><span class="line">	TIM_Cmd(TIM4, ENABLE);  <span class="comment">//使能TIM4</span></span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="RC522"><a href="#RC522" class="headerlink" title="RC522"></a>RC522</h4><p>​        对于RC522来说，使用的是单片机的硬件SPI。在SPI通信中，需要用到微秒的延时，所以这里还要用到嘀嗒定时器。配置好嘀嗒定时器后，就是RC522的初始化。</p>
+<h6 id="RC522的初始化"><a href="#RC522的初始化" class="headerlink" title="RC522的初始化"></a>RC522的初始化</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">void RC522_Init ( void )</span><br><span class="line">&#123;</span><br><span class="line">	RC522_SPI_Config ();	</span><br><span class="line">	RC522_Reset_Disable();	</span><br><span class="line">	RC522_CS_Disable();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line">  * @brief  R522 SPI配置</span><br><span class="line">  * @param  无</span><br><span class="line">  * @retval 无</span><br><span class="line">  *&#x2F;</span><br><span class="line">static void RC522_SPI_Config ( void )</span><br><span class="line">&#123;</span><br><span class="line">  &#x2F;* SPI_InitTypeDef  SPI_InitStructure *&#x2F;</span><br><span class="line">	GPIO_InitTypeDef GPIO_InitStructure;</span><br><span class="line">  </span><br><span class="line">	&#x2F;*!&lt; Configure SPI_RC522_SPI pins: CS *&#x2F;</span><br><span class="line">	RC522_GPIO_CS_CLK_FUN ( RC522_GPIO_CS_CLK, ENABLE );</span><br><span class="line">	GPIO_InitStructure.GPIO_Pin &#x3D; RC522_GPIO_CS_PIN;</span><br><span class="line">	GPIO_InitStructure.GPIO_Speed &#x3D; GPIO_Speed_50MHz;</span><br><span class="line">	GPIO_InitStructure.GPIO_Mode &#x3D; RC522_GPIO_CS_Mode;</span><br><span class="line">	GPIO_Init(RC522_GPIO_CS_PORT, &amp;GPIO_InitStructure);</span><br><span class="line">	</span><br><span class="line">  &#x2F;*!&lt; Configure SPI_RC522_SPI pins: SCK *&#x2F;</span><br><span class="line">	RC522_GPIO_SCK_CLK_FUN ( RC522_GPIO_SCK_CLK, ENABLE );</span><br><span class="line">	GPIO_InitStructure.GPIO_Pin &#x3D; RC522_GPIO_SCK_PIN;</span><br><span class="line">	GPIO_InitStructure.GPIO_Speed &#x3D; GPIO_Speed_50MHz;</span><br><span class="line">	GPIO_InitStructure.GPIO_Mode &#x3D; RC522_GPIO_SCK_Mode;</span><br><span class="line">	GPIO_Init(RC522_GPIO_SCK_PORT, &amp;GPIO_InitStructure);</span><br><span class="line">	</span><br><span class="line">  &#x2F;*!&lt; Configure SPI_RC522_SPI pins: MOSI *&#x2F;</span><br><span class="line">	RC522_GPIO_MOSI_CLK_FUN ( RC522_GPIO_MOSI_CLK, ENABLE );</span><br><span class="line">	GPIO_InitStructure.GPIO_Pin &#x3D; RC522_GPIO_MOSI_PIN;</span><br><span class="line">	GPIO_InitStructure.GPIO_Speed &#x3D; GPIO_Speed_50MHz;</span><br><span class="line">	GPIO_InitStructure.GPIO_Mode &#x3D; RC522_GPIO_MOSI_Mode;</span><br><span class="line">	GPIO_Init(RC522_GPIO_MOSI_PORT, &amp;GPIO_InitStructure);</span><br><span class="line"></span><br><span class="line">  &#x2F;*!&lt; Configure SPI_RC522_SPI pins: MISO *&#x2F;</span><br><span class="line">	RC522_GPIO_MISO_CLK_FUN ( RC522_GPIO_MISO_CLK, ENABLE );</span><br><span class="line">	GPIO_InitStructure.GPIO_Pin &#x3D; RC522_GPIO_MISO_PIN;</span><br><span class="line">	GPIO_InitStructure.GPIO_Mode &#x3D; RC522_GPIO_MISO_Mode;</span><br><span class="line">	GPIO_Init(RC522_GPIO_MISO_PORT, &amp;GPIO_InitStructure);	</span><br><span class="line">		</span><br><span class="line">  &#x2F;*!&lt; Configure SPI_RC522_SPI pins: RST *&#x2F;</span><br><span class="line">	RC522_GPIO_RST_CLK_FUN ( RC522_GPIO_RST_CLK, ENABLE );</span><br><span class="line">	GPIO_InitStructure.GPIO_Pin &#x3D; RC522_GPIO_RST_PIN;</span><br><span class="line">	GPIO_InitStructure.GPIO_Speed &#x3D; GPIO_Speed_50MHz;</span><br><span class="line">	GPIO_InitStructure.GPIO_Mode &#x3D; RC522_GPIO_RST_Mode;</span><br><span class="line">	GPIO_Init(RC522_GPIO_RST_PORT, &amp;GPIO_InitStructure);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="接下来就是主函数"><a href="#接下来就是主函数" class="headerlink" title="接下来就是主函数"></a>接下来就是主函数</h4><p>​        在main.c里面包含两个函数，一个是寻卡函数，一个是main函数。首先定义的是卡A的密匙，基本上都是6个0xff。在寻卡函数里面，讲预先设定好的IC卡序列号存储在数组中，再将读取到的序列号和数组进行比对，这样就能正确识别到已经保存的卡片信息。</p>
+<h6 id="main-c"><a href="#main-c" class="headerlink" title="main.c"></a>main.c</h6><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">uint8_t</span> KeyValue[]=&#123;<span class="number">0xFF</span> ,<span class="number">0xFF</span>, <span class="number">0xFF</span>, <span class="number">0xFF</span>, <span class="number">0xFF</span>, <span class="number">0xFF</span>&#125;;   <span class="comment">// 卡A密钥</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">IC_test</span> <span class="params">( <span class="keyword">void</span> )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">//uint32_t writeValue = 100;</span></span><br><span class="line">	<span class="comment">//uint32_t readValue;</span></span><br><span class="line">	<span class="comment">//char cStr [ 30 ];</span></span><br><span class="line">	<span class="keyword">uint8_t</span> ucArray_ID [ <span class="number">4</span> ];    <span class="comment">/*先后存放IC卡的类型和UID(IC卡序列号)*/</span>                                                                                         </span><br><span class="line">	<span class="keyword">uint8_t</span> ucStatusReturn;      <span class="comment">/*返回状态*/</span> </span><br><span class="line">	u8 ID1[]=&#123;<span class="number">0xA9</span>,<span class="number">0x37</span>,<span class="number">0x71</span>,<span class="number">0xe4</span>&#125;;</span><br><span class="line">  <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">  &#123;    </span><br><span class="line">		<span class="comment">/*寻卡*/</span></span><br><span class="line">		<span class="keyword">if</span> ( ( ucStatusReturn = PcdRequest ( PICC_REQIDL, ucArray_ID ) ) != MI_OK )  <span class="comment">//ucArray_ID是卡片类型</span></span><br><span class="line">       <span class="comment">/*若失败再次寻卡*/</span></span><br><span class="line">		ucStatusReturn = PcdRequest ( PICC_REQIDL, ucArray_ID );		                                                </span><br><span class="line">		<span class="keyword">if</span> ( ucStatusReturn == MI_OK  )</span><br><span class="line">		&#123;</span><br><span class="line">      <span class="comment">/*防冲撞（当有多张卡进入读写器操作范围时，防冲突机制会从其中选择一张进行操作）*/</span></span><br><span class="line">			<span class="keyword">if</span> ( PcdAnticoll ( ucArray_ID ) == MI_OK )                                                                   </span><br><span class="line">			&#123;</span><br><span class="line">				PcdSelect(ucArray_ID);		<span class="comment">//选定卡片	</span></span><br><span class="line">				PcdAuthState( PICC_AUTHENT1A, <span class="number">0x11</span>, KeyValue, ucArray_ID );<span class="comment">//校验密码 (密码验证模式,块地址,密码,卡片序列号)</span></span><br><span class="line">				GPIO_ResetBits(LED1_GPIO_PORT,LED1_GPIO_PIN);</span><br><span class="line">				<span class="keyword">if</span>(ID1[<span class="number">0</span>]==ucArray_ID[<span class="number">0</span>])</span><br><span class="line">				&#123;</span><br><span class="line">					TIM_SetCompare1(TIM4,<span class="number">75</span>);</span><br><span class="line">					Delay_ms(<span class="number">1000</span>);</span><br><span class="line">					TIM_SetCompare1(TIM4,<span class="number">50</span>);</span><br><span class="line">					GPIO_SetBits(LED1_GPIO_PORT, LED1_GPIO_PIN);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">else</span> </span><br><span class="line">				&#123;</span><br><span class="line">					TIM_SetCompare1(TIM4,<span class="number">50</span>);</span><br><span class="line">					GPIO_SetBits(LED1_GPIO_PORT, LED1_GPIO_PIN);</span><br><span class="line">					Delay_ms(<span class="number">1000</span>);</span><br><span class="line">					GPIO_ResetBits(LED1_GPIO_PORT,LED1_GPIO_PIN);</span><br><span class="line">					Delay_ms(<span class="number">1000</span>);</span><br><span class="line">					GPIO_SetBits(LED1_GPIO_PORT, LED1_GPIO_PIN);</span><br><span class="line">					Delay_ms(<span class="number">1000</span>);</span><br><span class="line">					GPIO_ResetBits(LED1_GPIO_PORT,LED1_GPIO_PIN);</span><br><span class="line">					Delay_ms(<span class="number">1000</span>);</span><br><span class="line">					GPIO_SetBits(LED1_GPIO_PORT, LED1_GPIO_PIN);</span><br><span class="line">					Delay_ms(<span class="number">1000</span>);</span><br><span class="line">					GPIO_ResetBits(LED1_GPIO_PORT,LED1_GPIO_PIN);</span><br><span class="line">					Delay_ms(<span class="number">1000</span>);</span><br><span class="line">					GPIO_SetBits(LED1_GPIO_PORT, LED1_GPIO_PIN);</span><br><span class="line">					Delay_ms(<span class="number">1000</span>);</span><br><span class="line">					GPIO_ResetBits(LED1_GPIO_PORT,LED1_GPIO_PIN);</span><br><span class="line">					Delay_ms(<span class="number">1000</span>);</span><br><span class="line">				&#125;</span><br><span class="line">				PcdHalt();<span class="comment">//令卡片进入休眠状态	</span></span><br><span class="line">			&#125;				</span><br><span class="line">		&#125;		</span><br><span class="line">  &#125;	</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;	</span><br><span class="line">	SysTick_Init (); </span><br><span class="line">	RC522_Init (); </span><br><span class="line">	</span><br><span class="line">	TIM4_PWM_Init(<span class="number">999</span>,<span class="number">1439</span>);</span><br><span class="line">	TIM_SetCompare1(TIM4,<span class="number">50</span>);</span><br><span class="line">	</span><br><span class="line">	LED_GPIO_Config();	 </span><br><span class="line">	GPIO_SetBits(LED1_GPIO_PORT,LED1_GPIO_PIN);<span class="comment">//先关灯</span></span><br><span class="line">	</span><br><span class="line">	PcdReset();</span><br><span class="line">	M500PcdConfigISOType ( <span class="string">&#x27;A&#x27;</span> );</span><br><span class="line">	<span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		IC_test();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/child/2021/08/10/%E5%9F%BA%E4%BA%8Estm32%E7%9A%84%E5%AE%BF%E8%88%8D%E9%97%A8%E7%A6%81%E7%B3%BB%E7%BB%9F/" title="基于stm32的宿舍门禁系统" target="_blank" rel="external">http://example.com/child/2021/08/10/基于stm32的宿舍门禁系统/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/xuejb" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/xuejb" target="_blank"><span class="text-dark">手可摘星辰</span><small class="ml-1x">ARM,st</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2021/08/09/stm32%E9%80%9A%E7%94%A8%E5%AE%9A%E6%97%B6%E5%99%A8%E4%BA%A7%E7%94%9FPWM/" title="stm32通用定时器产生PWM"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/xuejb" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
